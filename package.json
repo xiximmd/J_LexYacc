@@ -1,0 +1,15 @@
+{
+  "name": "j_compile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "main": "node main.js",
+    "test": "node test.js",
+    "test2": "node test2.js",
+    "test3": "node test3.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}

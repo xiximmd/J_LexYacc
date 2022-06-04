@@ -593,10 +593,18 @@ class J_Lex {
       `],codeToName:` +
       JSON.stringify(codeToName) +
       `}`;
-
+    if (lex.input.code == undefined) {
+      lex.input.code = {};
+    }
+    if (lex.input.code.prefix == undefined) {
+      lex.input.code.prefix = "";
+    }
+    if (lex.input.code.suffix == undefined) {
+      lex.input.code.suffix = "";
+    }
     var code3 =
       lex.input.code.prefix +
-      `class J_SimpleLex {
+      `class J_SimpleLexers {
               static info = ` +
       code4 +
       `
@@ -610,7 +618,7 @@ class J_Lex {
       }
       constructor() {
         this.initState();
-        J_Lex.stateTranTableInit();
+        J_Lexers.stateTranTableInit();
       }
       initState() {
         this.string = "";
@@ -621,9 +629,9 @@ class J_Lex {
        * @param {*} char 输入字符
        */
       readChar(char) {
-        var next = J_SimpleLex.info.stateTranTable[char + "_" + this.state];
+        var next = J_SimpleLexers.info.stateTranTable[char + "_" + this.state];
         if (next == undefined) {
-          var ft = J_SimpleLex.info.ftable[this.state];
+          var ft = J_SimpleLexers.info.ftable[this.state];
           if (ft == undefined) {
             return false;
           } else {
@@ -632,7 +640,7 @@ class J_Lex {
               var temp = ft[i];
               var t = false;
               for (var j = 0; j < temp.length; ++j) {
-                if (J_SimpleLex.info.funcs[temp[j]](char)) {
+                if (J_SimpleLexers.info.funcs[temp[j]](char)) {
                   t = true;
                   break;
                 }
@@ -643,7 +651,7 @@ class J_Lex {
                 string += "f";
               }
             }
-            var next = J_SimpleLex.info.funcTranTable[string + "_" + this.state];
+            var next = J_SimpleLexers.info.funcTranTable[string + "_" + this.state];
             if (next == undefined) {
               return false;
             } else {
@@ -659,26 +667,34 @@ class J_Lex {
         }
       }
     }
-    class J_Lex extends J_SimpleLex {
+    class J_Lexers extends J_SimpleLexers {
+      /**
+       * 初始化词法分析器状态，每次重新运行前调用
+       */
       initState() {
         super.initState();
         this.lastFinal = { state: 0, string: "" };
       }
+      /**
+       * 实行一次最大匹配，支持流式读取，若inputStr不足以形成一个符号，则返回null，可继续调用readTag(接下来的内容)，直到最大匹配并返回匹配到的词法符号
+       * @param {*} inputStr 内容字符串
+       * @returns 如果识别到一个词法符号则返回对象var output = {tag:[匹配符号1,匹配符号2...],value:"匹配字符串",restStr:"剩余的字符串"}，如果未识别到一个词法符号则返回null。如果匹配非法，则output.error = true
+       */
       readTag(inputStr) {
         var output = {};
         for (var i = 0; i < inputStr.length; ++i) {
           var b = this.readChar(inputStr.charAt(i));
-          var stateS = J_Lex.info.AccStatID[this.state];
+          var stateS = J_Lexers.info.AccStatID[this.state];
           if (stateS.length > 0) {
             this.lastFinal.state = this.state;
             this.lastFinal.string = this.string;
           }
           if (!b) {
             var state = this.lastFinal.state;
-            var stateS = J_Lex.info.AccStatID[state];
+            var stateS = J_Lexers.info.AccStatID[state];
             var stateName = [];
             stateS.forEach((v) => {
-              stateName.push(J_Lex.info.codeToName[v]);
+              stateName.push(J_Lexers.info.codeToName[v]);
             });
             output.tag = stateName;
             output.value = this.lastFinal.string;
@@ -695,13 +711,17 @@ class J_Lex {
         }
         return null;
       }
+      /**
+       * 内容读取结束后调用，输出最后一次匹配内容，如果无法匹配全部内容 output.error = true
+       * @returns 同readTag
+       */
       finishRead() {
         var output = {};
         var state = this.lastFinal.state;
-        var stateS = J_Lex.info.AccStatID[state];
+        var stateS = J_Lexers.info.AccStatID[state];
         var stateName = [];
         stateS.forEach((v) => {
-          stateName.push(J_Lex.info.codeToName[v]);
+          stateName.push(J_Lexers.info.codeToName[v]);
         });
         output.tag = stateName;
         output.value = this.lastFinal.string;
@@ -1532,7 +1552,7 @@ class J_Yacc {
     }
     info.table = CodeTable;
     var code1 =
-      `class J_SimpleYacc {
+      `class J_SimpleParser {
         static info = ` +
       JSON.stringify(info) +
       `;
@@ -1548,12 +1568,12 @@ class J_Yacc {
         }
         readSymbolCode(code, args) {
           if (code == undefined) {
-            throw "输入symbol非法:" + J_SimpleYacc.info.indexToSymbol[code];
+            throw "输入symbol非法:" + J_SimpleParser.info.indexToSymbol[code];
           }
           var top = this.Stack[this.Stack.length - 1];
-          var d = J_SimpleYacc.info.table[top.state + "_" + code];
+          var d = J_SimpleParser.info.table[top.state + "_" + code];
           if (d == undefined) {
-            throw "解析异常:" + (top.state + "_" + code)+" 遇到符号:["+J_SimpleYacc.info.indexToSymbol[code]+"]";
+            throw "解析异常:" + (top.state + "_" + code)+" 遇到符号:["+J_SimpleParser.info.indexToSymbol[code]+"]";
           }
           if (d.d == "j") {
             this.Stack.push({ symbol: code, state: d.t, args: args });
@@ -1562,7 +1582,7 @@ class J_Yacc {
             this.his = this.Stack.slice(to);
             var args1 = this.callback(this.his);
             this.Stack = this.Stack.slice(0, to);
-            if (d.s == J_SimpleYacc.info.stop) {
+            if (d.s == J_SimpleParser.info.stop) {
               return true;
             }
       
@@ -1576,21 +1596,21 @@ class J_Yacc {
           return false;
         }
         readSymbol(symbol, args) {
-          var code = J_SimpleYacc.info.symbolToIndex[symbol];
+          var code = J_SimpleParser.info.symbolToIndex[symbol];
           if (code == undefined) {
             throw "输入symbol非法:" + symbol;
           }
           return this.readSymbolCode(code, args);
         }
       }
-      class J_Yacc extends J_SimpleYacc {
+      class J_Parser extends J_SimpleParser {
         constructor() {
           super();
           this.callback = (F) => {
             return this.scallback(
               F.map((v) => {
                 return {
-                  symbol: J_SimpleYacc.info.indexToSymbol[v.symbol],
+                  symbol: J_SimpleParser.info.indexToSymbol[v.symbol],
                   state: v.state,
                   args: v.args,
                 };
@@ -1603,6 +1623,15 @@ class J_Yacc {
         }
       }    
       `;
+    if (yacc.input.code == undefined) {
+      yacc.input.code = {};
+    }
+    if (yacc.input.code.prefix == undefined) {
+      yacc.input.code.prefix = "";
+    }
+    if (yacc.input.code.suffix == undefined) {
+      yacc.input.code.suffix = "";
+    }
     yacc.code = yacc.input.code.prefix + code1 + yacc.input.code.suffix;
   }
 }

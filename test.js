@@ -3,7 +3,6 @@ import fs from "fs";
 console.log("Start");
 var j_lex = new J_Lex();
 var s = fs.readFileSync("./test/test.ccc").toString();
-J_Lex.stateTranTableInit();
 function show(output) {
   if (output.tag[0] == "ws") {
     return;

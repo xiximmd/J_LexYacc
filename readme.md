@@ -17,12 +17,9 @@
 3 生成的词法分析器支持多文法匹配，同时输出全部匹配结果，优先级与文法定义顺序相同
 ### 2.1 J_Lex使用说明
 #### 2.1.1 简单使用
-<font color="red">
 注意：对应 j_lexdemo1，执行以下指令直接运行demo
-
 npm run j_lexdemo1
 npm run j_lexdemo1run
-</font>
 
 ##### step1: 包导入
 ```javascript
@@ -103,10 +100,8 @@ console.log(output);//{ tag: [ 'ws' ], value: ' ', restStr: '1 67.9 21' }
 //最后调用output = j_lexers.finishRead();读取最后一个匹配
 ```
 #### 2.1.1 详细说明
-<font color="red">
-注意：对应 j_lexdemo2，执行以下指令直接运行demo  
+<font color="red">注意：对应 j_lexdemo2，执行以下指令直接运行demo</font>
+<font color="red">npm run j_lexdemo2</font>
+<font color="red">npm run j_lexdemo2run</font>
 
-npm run j_lexdemo2
-npm run j_lexdemo2run
-</font>
 

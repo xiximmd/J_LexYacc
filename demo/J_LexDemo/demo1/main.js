@@ -17,14 +17,14 @@ var lex = {
       { id: "ws", regx: " " }, //识别空格
       { id: "float", regx: "{num}+.{num}+|{num}+" }, //识别小数
       { id: "int", regx: "{num}+" }, //识别整数
-      { id: "num", regx: "[0-9]" ,}, //识别数字
+      { id: "num", regx: "[0-9]" }, //识别数字
     ],
   },
 };
 //运行J_Lex，输出代码保存在lex.code中
 console.log("开始生成");
 J_Lex.run(lex);
-
+console.log(lex);
 //将生成的代码写入到文件
 fs.writeFileSync("./out/J_Lexers.js", lex.code);
 console.log("生成完毕");

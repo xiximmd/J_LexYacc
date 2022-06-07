@@ -17,9 +17,9 @@
 3 生成的词法分析器支持多文法匹配，同时输出全部匹配结果，优先级与文法定义顺序相同
 ### 2.1 J_Lex使用说明
 #### 2.1.1 简单使用
-注意：对应 j_lexdemo1，执行以下指令直接运行demo
+*注意：对应 j_lexdemo1，执行以下指令直接运行demo
 npm run j_lexdemo1
-npm run j_lexdemo1run
+npm run j_lexdemo1run*
 
 ##### step1: 包导入
 ```javascript
@@ -100,8 +100,55 @@ console.log(output);//{ tag: [ 'ws' ], value: ' ', restStr: '1 67.9 21' }
 //最后调用output = j_lexers.finishRead();读取最后一个匹配
 ```
 #### 2.1.1 详细说明
-<font color="red">注意：对应 j_lexdemo2，执行以下指令直接运行demo</font>
-<font color="red">npm run j_lexdemo2</font>
-<font color="red">npm run j_lexdemo2run</font>
-
-
+*注意：对应 j_lexdemo2，执行以下指令直接运行demo  
+npm run j_lexdemo2
+npm run j_lexdemo2run*
+##### 词法定义说明
+$$lex.regxs := [regx_1,regx_2,regx_m]$$
+$$regx_i := \{id:名称,regx:词法\}$$
+$$\begin{aligned}
+词法:=&块_1块_2...块_n\\
+&or\\
+&词法|词法
+\end{aligned}$$
+$$\begin{aligned}
+块:=&一个字符 \\
+&or \\
+ &()[]\{\}<>四种括号包括的内容
+\end{aligned}$$
+|符号|含义|
+|---|---|
+|()||
+|[]||
+|{}||
+```javascript
+var lex = {
+    /**词法正则表达式 */
+    regxs: [
+      //支持中文ID和中文词法解析
+      { id: "中文也支持噢", regx: "耶" },
+      //|使用，表示或
+      //()使用，用于确定结合优先级
+      //+使用，表示前面的字符串重复1~n次
+      { id: "01string", regx: "(0|1)+" },
+      //{}使用，引用其他词法定义
+      //*使用，表示前面的字符串重复0~n次
+      { id: "float", regx: "{数字}*.{数字}+" },
+      //[]使用，等价于"\r|\n|\t| "，注意空格
+      { id: "ws", regx: "[\r\n\t ]" },
+      //-使用，等价于"<(c)=\\>c.charCodeAt(0)>=48&&c.charCodeAt(0)<=57>"
+      //noMatch属性使用，表示该词法不需要匹配
+      { id: "数字", regx: "[0-9]", noMatch: true },
+      //<>使用，定义匹配函数function(c)=>bool，匹配一个字符，匹配与否由函数决定
+      { id: "非引号字符", regx: `<(c)=\\>c != '"'>` },
+      //\（反斜杠）使用，加在+*-|\()[]{}<>等前，用于表示其本身含义
+      {
+        id: "反斜杠使用",
+        regx: "\\+|\\*|\\-|\\||\\\\|\\(|\\)|\\[|\\]|\\{|\\}|\\<|\\>",
+      },
+      //综合案例：识别c语言注释
+      { id: "注释", regx: "//<(c)=\\>c != '\\\\n'>*" },
+    ],
+  },
+};
+```

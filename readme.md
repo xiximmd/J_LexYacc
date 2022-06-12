@@ -110,7 +110,7 @@ npm run j_lexdemo2run*
 $$lex.regxs := [regx_1,regx_2,regx_m]$$
   
 $$
-regx_i := \{id:名称,regx:词法[,noMatch:bool]\}
+regx_i := \\{id:名称,regx:词法[,noMatch:bool]\\}
 $$  
   
 $$\begin{aligned}

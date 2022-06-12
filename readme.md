@@ -110,6 +110,7 @@ npm run j_lexdemo2run*
 $$
 lex.regxs := [regx_1,regx_2,regx_m]
 $$  
+
 $$
  1 + 1 = 2 \\ 1 + 2 = 3
 $$  

@@ -107,23 +107,13 @@ console.log(output);//{ tag: [ 'ws' ], value: ' ', restStr: '1 67.9 21' }
 npm run j_lexdemo2  
 npm run j_lexdemo2run*
 ##### 词法定义说明
-$$lex.regxs := [regx_1,regx_2,regx_m]$$  
-$$ 1 + 1 = 2 \\ 1 + 2 = 3 $$  
-
 $$
-regx_i := \{id:名称,regx:词法[,noMatch:bool]\}
+lex.regxs := [regx_1,regx_2,regx_m]
+$$  
 $$
-$$\begin{aligned}
-词法:=&块_1块_2...块_n\\
-&or\\
-&词法|词法
-\end{aligned}$$  
+ 1 + 1 = 2 \\ 1 + 2 = 3
+$$  
 
-$$\begin{aligned}
-块:=&（一个字符 \\
-&or \\
- &()[]\{\}<>四种括号的内容）[| or * or +]
-\end{aligned}$$
 注：noMatch属性使用，表示该词法不需要匹配，仅为支持其他词法定义时引用而存在，该值可为空
 |符号|含义|
 |---|---|

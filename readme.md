@@ -1,4 +1,4 @@
-# J_LexYacc-一款JS编写的词法、语法分析生成器
+# J_LexYacc-一款纯JS编写的词法、语法分析生成器
 作者：槿铃兔
 ## 一、说明
 1 该库包含J_Lex,L_Yacc两个工具  
@@ -9,14 +9,14 @@
 > *  npm run j_lexdemo2 //J_LexDemo2 main.js执行
 > *  npm run j_lexdemo2run //J_LexDemo2 run.js执行
 
-4 根目录下的test代码为未整理代码，暂不可用
+4 根目录下的test代码为未整理代码，暂不可用  
 5 文档编写中。。。
 ## 二、J_Lex
 一款JS编写的词法分析生成器  
 特点：  
-1 最大程度支持自定义，通过继承J_SimpleLexers实现自定义匹配方式，不仅限于最大匹配  
-2 词法定义中支持匹配函数定义，用于解决如中文等因基数过大无法构建DFA有向边的问题  
-3 生成的词法分析器支持多文法匹配，同时输出全部匹配结果，优先级与文法定义顺序相同  
+1 词法定义中支持匹配函数定义，用于解决如中文等因基数过大无法构建DFA有向边的问题  
+2 生成的词法分析器支持多文法匹配，同时输出全部匹配结果，优先级与文法定义顺序相同  
+3 最大程度支持自定义，通过继承J_SimpleLexers实现自定义匹配方式，不仅限于最大匹配  
 4 J_Lex本身及生成的代码都有做良好的异常处理  
 ### 2.1 J_Lex使用说明
 #### 2.1.1 简单使用
@@ -108,12 +108,13 @@ npm run j_lexdemo2
 npm run j_lexdemo2run*
 ##### 词法定义说明
 $$lex.regxs := [regx_1,regx_2,regx_m]$$
-$$regx_i := \{id:名称,regx:词法[,noMatch:bool]\}$$
+$$regx_i := \{id:名称,regx:词法[,noMatch:bool]\}$$  
 $$\begin{aligned}
 词法:=&块_1块_2...块_n\\
 &or\\
 &词法|词法
-\end{aligned}$$
+\end{aligned}$$  
+
 $$\begin{aligned}
 块:=&（一个字符 \\
 &or \\

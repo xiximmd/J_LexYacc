@@ -107,9 +107,7 @@ console.log(output);//{ tag: [ 'ws' ], value: ' ', restStr: '1 67.9 21' }
 npm run j_lexdemo2  
 npm run j_lexdemo2run*
 ##### 词法定义说明
-$$
-lex.regxs := \[regx_1,regx_2,regx_m\]
-$$  
+
 $$
  1 + 1 = 2 \\ 1 + 2 = 3
 $$  

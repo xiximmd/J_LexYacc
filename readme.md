@@ -108,16 +108,8 @@ npm run j_lexdemo2
 npm run j_lexdemo2run*
 ##### 词法定义说明
 $$lex.regxs := [regx_1,regx_2,regx_m]$$
-$$regx_i := \{id:名称,regx:词法[,noMatch:bool]\}$$  
 $$
-\begin{equation}
-\dot{\boldsymbol{x}}=f(\boldsymbol{x})
-=\left\{
-	\begin{array}{ll}
-		f_{1}(\boldsymbol{x}) & \boldsymbol{x} \in S_{1} \\
-		f_{2}(\boldsymbol{x}) & \boldsymbol{x} \in S_{2}
-	\end{array}\right.
-\end{equation}
+regx_i := \{id:名称,regx:词法[,noMatch:bool]\}
 $$
 $$\begin{aligned}
 词法:=&块_1块_2...块_n\\

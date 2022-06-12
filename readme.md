@@ -109,6 +109,16 @@ npm run j_lexdemo2run*
 ##### 词法定义说明
 $$lex.regxs := [regx_1,regx_2,regx_m]$$
 $$regx_i := \{id:名称,regx:词法[,noMatch:bool]\}$$  
+$$
+\begin{equation}
+\dot{\boldsymbol{x}}=f(\boldsymbol{x})
+=\left\{
+	\begin{array}{ll}
+		f_{1}(\boldsymbol{x}) & \boldsymbol{x} \in S_{1} \\
+		f_{2}(\boldsymbol{x}) & \boldsymbol{x} \in S_{2}
+	\end{array}\right.
+\end{equation}
+$$
 $$\begin{aligned}
 词法:=&块_1块_2...块_n\\
 &or\\
@@ -131,6 +141,8 @@ $$\begin{aligned}
 |<>|用于定义一个接受字符函数，用于表示是否接受一个字符，<>内为一个js函数，(c)=>bool，如：<(c)=\\>c!="a">表示接受除a意外的任意字符（注意，由于"<",">"为特殊字符，其中的任意"<",">"要表示其原义需加反斜杠）|
 |\[\]|为简写"\|"和<>而存在，如：\[abc\]等价于 a \| b \| c，而\[0-9\]等价于<(c)=\\>c.charCodeAt(0)>=48&&c.charCodeAt(0)<=57>|
 |\\ |反斜杠表示转义字符，如：\* 将报错，而\\*表示接受字符"\*"|
+
+例子：
 ```javascript
 var lex = {
     /**词法正则表达式 */

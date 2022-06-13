@@ -24,6 +24,7 @@ var lex = {
 //运行J_Lex，输出代码保存在lex.code中
 console.log("开始生成");
 J_Lex.run(lex);
+console.log("打印中间变量");
 console.log(lex);
 //将生成的代码写入到文件
 fs.writeFileSync("./out/J_Lexers.js", lex.code);

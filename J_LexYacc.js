@@ -886,6 +886,13 @@ class J_Yacc {
       }
       gramsSettings.set(Vni.get(element.id), settings);
     });
+    //将拓广后的开始符的优先级和结合性定义好
+    gramsSettings.set(Vni.get(S_), [
+      {
+        priority: formalGram.S_priority,
+        asso: formalGram.S_asso == undefined ? globalAsso : formalGram.S_asso,
+      },
+    ]);
     yacc.formalGram = {
       P: Pi,
       Vt: Vti,
@@ -979,6 +986,14 @@ class J_Yacc {
 
     return output;
   }
+  /**
+   * 输出冲突处理方案日志
+   * @param {*} yacc 运行run函数时的输入
+   * @param {*} outputHandle 输出日志调用函数，默认为console.log，表示输出到控制台
+   * @param {*} solvedShowLevel 已解决方案的输出等级，输出等级未1，2，3，4，默认为3
+   * @param {*} unsolvedShowLevel 未解决方案的输出等级，输出等级未1，2，3，4，默认为4
+   * @param {*} filter 一个过滤器，过滤一些不想输出的日志
+   */
   static showConflictResolution(
     yacc,
     outputHandle = console.log,
@@ -1003,6 +1018,11 @@ class J_Yacc {
         );
       }
     });
+  }
+  static showClosuers(yacc) {
+    console.log(
+      this.__ClosuersToString(yacc.formalGram, yacc.formalGram.closuers)
+    );
   }
   static createClosuer(yacc) {
     var formalGram = yacc.formalGram;
@@ -1286,6 +1306,7 @@ class J_Yacc {
     var closuers = formalGram.closuers;
     var table = formalGram.table;
     var gramsSettings = formalGram.gramsSettings;
+    // console.log(gramsSettings);
     var tableErrors = []; //构建LR表时遇到的问题以及问题的解决方案
     formalGram.tableErrors = tableErrors;
     //开始构造info
@@ -1357,6 +1378,7 @@ class J_Yacc {
               var proj1 = closuers[ci1][cj1];
               var proj3 = closuers[ci3][cj3];
               var settings1 = gramsSettings.get(proj1.f)[proj1.i];
+
               var settings3 = gramsSettings.get(proj3.f)[proj3.i];
               if (settings1.priority < settings3.priority) {
                 //优先级大的执行
@@ -1428,6 +1450,7 @@ class J_Yacc {
             } else {
               //不同产生式出现的冲突
               var settings1 = gramsSettings.get(proj1.f)[proj1.i];
+              // console.log(proj3.f + " " + proj3.i);
               var settings3 = gramsSettings.get(proj3.f)[proj3.i];
               if (settings1.priority < settings3.priority) {
                 //优先级大的执行
@@ -1478,6 +1501,7 @@ class J_Yacc {
                   //结合方向定义不同
                 }
               } else {
+                // //以下代码启用会有危险性，由于全局asso定义的存在，可能会导致很多结合性冲突解决遇到异常，但如果启用，则可能由于拓广文法的起始符无法定义优先级而遇到无法解决的冲突
                 // //优先级未定义，按照结合方向执行
                 // if (settings1.ass0 == settings3.ass0) {
                 //   //结合方向定义相同
@@ -1556,72 +1580,120 @@ class J_Yacc {
         static info = ` +
       JSON.stringify(info) +
       `;
-        constructor() {
-          this.initState();
-          this.callback = (F) => {
-            return undefined;
-          };
-        }
-        initState() {
-          this.Stack = [{ symbol: -1, state: 0 }];
-          this.his = null;
-        }
-        readSymbolCode(code, args) {
-          if (code == undefined) {
-            throw "输入symbol非法:" + J_SimpleParser.info.indexToSymbol[code];
-          }
-          var top = this.Stack[this.Stack.length - 1];
-          var d = J_SimpleParser.info.table[top.state + "_" + code];
-          if (d == undefined) {
-            throw "解析异常:" + (top.state + "_" + code)+" 遇到符号:["+J_SimpleParser.info.indexToSymbol[code]+"]";
-          }
-          if (d.d == "j") {
-            this.Stack.push({ symbol: code, state: d.t, args: args });
-          } else {
-            var to = this.Stack.length - d.l;
-            this.his = this.Stack.slice(to);
-            var args1 = this.callback(this.his);
-            this.Stack = this.Stack.slice(0, to);
-            if (d.s == J_SimpleParser.info.stop) {
-              return true;
-            }
-      
-            if (this.readSymbolCode(d.s, args1)) {
-              return true;
-            }
-            if (this.readSymbolCode(code, args)) {
-              return true;
-            }
-          }
-          return false;
-        }
-        readSymbol(symbol, args) {
-          var code = J_SimpleParser.info.symbolToIndex[symbol];
-          if (code == undefined) {
-            throw "输入symbol非法:" + symbol;
-          }
-          return this.readSymbolCode(code, args);
-        }
+      constructor() {
+        this.initState();
+        this.callback = (F) => {
+          return undefined;
+        };
       }
-      class J_Parser extends J_SimpleParser {
-        constructor() {
-          super();
-          this.callback = (F) => {
-            return this.scallback(
-              F.map((v) => {
-                return {
-                  symbol: J_SimpleParser.info.indexToSymbol[v.symbol],
-                  state: v.state,
-                  args: v.args,
-                };
-              })
-            );
-          };
-          this.scallback = (F) => {
-            return undefined;
-          };
+      /**
+       * 初始化函数，每次需重新运行时调用
+       */
+      initState() {
+        this.Stack = [{ symbol: -1, state: 0 }];
+        this.his = null;
+      }
+      /**
+       * 读取符号的编号并进行相应的状态转换
+       * @param {*} code 符号对应的编号，符号编号映射表存于J_SimpleParser.info中
+       * @param {*} args 将挂载到该符号上的参数，进行属性文法设计时使用
+       * @returns 本次读取是否合法，合法则返回true，不合法返回false
+       */
+      readSymbolCode(code, args) {
+        if (code == undefined) {
+          throw "输入symbol非法:" + J_SimpleParser.info.indexToSymbol[code];
         }
-      }    
+        var top = this.Stack[this.Stack.length - 1];
+        var d = J_SimpleParser.info.table[top.state + "_" + code];
+        if (d == undefined) {
+          throw (
+            "解析异常:" +
+            (top.state + "_" + code) +
+            " 遇到符号:[" +
+            J_SimpleParser.info.indexToSymbol[code] +
+            "]"
+          );
+        }
+        if (d.d == "j") {
+          this.Stack.push({ symbol: code, state: d.t, args: args });
+        } else {
+          var to = this.Stack.length - d.l;
+          /**
+           * 该值作为规约历史记录，记录最近一次规约参数
+           */
+          this.his = { t: d.s, f: this.Stack.slice(to) };
+          var args1 = this.callback(this.his);
+          this.Stack = this.Stack.slice(0, to);
+          if (d.s == J_SimpleParser.info.stop) {
+            return true;
+          }
+    
+          if (this.readSymbolCode(d.s, args1)) {
+            return true;
+          }
+          if (this.readSymbolCode(code, args)) {
+            return true;
+          }
+        }
+        return false;
+      }
+    }
+    class J_Parser extends J_SimpleParser {
+      constructor() {
+        super();
+        this.callback = (F) => {
+          /**
+           * 该值作为规约历史记录，记录最近一次scallback调用参数（已进行编号与符号转换）
+           */
+          this.shis = {
+            t: J_SimpleParser.info.indexToSymbol[F.t],
+            f: F.f.map((v) => {
+              return {
+                symbol: J_SimpleParser.info.indexToSymbol[v.symbol],
+                state: v.state,
+                args: v.args,
+              };
+            }),
+          };
+          return this.scallback(this.shis);
+        };
+        /**
+         * 规约回调处理，每次规约时调用
+         * @param {*} F 规约信息，F={t:"规约至符号",f:[{symbol:"待规约符号1",state:"状态栈中该符号对应的状态码",args:"该符号挂载的参数"},...]}
+         * @returns 将挂载到规约符号上的参数，进行属性文法设计时使用
+         */
+        this.scallback = (F) => {
+          return undefined;
+        };
+      }
+      /**
+       * 初始化函数，每次需重新运行时调用
+       */
+      initState() {
+        super.initState();
+        this.shis = null;
+      }
+      /**
+       * 读取符号并进行相应的状态转换
+       * @param {*} code 待读取的符号
+       * @param {*} args 将挂载到该符号上的参数，进行属性文法设计时使用
+       * @returns 本次读取是否合法，合法则返回true，不合法返回false
+       */
+      readSymbol(symbol, args) {
+        var code = J_SimpleParser.info.symbolToIndex[symbol];
+        if (code == undefined) {
+          throw "输入symbol非法:" + symbol;
+        }
+        return this.readSymbolCode(code, args);
+      }
+      /**
+       * 全部符号读取完毕后调用，调用此函数将结束输入，正常情况下将规约至开始符号
+       * @returns 结束是否合法，合法则返回true，不合法返回false
+       */
+      finishRead() {
+        return this.readSymbolCode(-1);
+      }
+    }
       `;
     if (yacc.input.code == undefined) {
       yacc.input.code = {};

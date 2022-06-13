@@ -16,7 +16,7 @@
 > *  npm run j_yaccdemo2 //J_YaccDemo2 main.js执行
 > *  npm run j_yaccdemo2run //J_YaccDemo2 run.js执行
 
-一个完整的demo,实现C语言大部分语法词法的分析  
+一个完整的demo,实现C语言大部分词法语法的分析  
 > *  npm run demo //CompleteDemo main.js执行
 > *  npm run demorun //CompleteDemo run.js执行
 
@@ -559,3 +559,210 @@ j_yaccdemo2运行最终结果：
   ┃┗Expr  
   ┃ ┗num ⇒ 6666  
   ┗) ⇒ )  
+# 四、J_Lex、J_Yacc联合使用
+*注意：对应 demo，执行以下指令直接运行demo*  
+> * npm run demo  
+> * npm run demorun  
+
+main.js运行效果：  
+> 开始生成  
+词法分析生成器开始运行  
+词法分析生成器运行结束  
+词法分析代码保存结束  
+语法分析生成器开始运行  
+语法分析生成器运行结束  
+语法分析代码保存结束  
+生成完毕  
+
+分析的c语言程序：  
+```c
+#include<stdio.h>
+int main()
+{
+    if(c)
+        if(a)
+            print("hhh");
+        else
+        {
+            test(1,1&1);
+        }
+}
+float test(int a,int b)
+{
+    return (float)(a+b);
+}
+```
+
+run.js运行效果：  
+```
+Start
+{ tag: [ '#include' ], value: '#include' }
+{ tag: [ '<>' ], value: '<stdio.h>' }
+{ tag: [ 'type', 'id' ], value: 'int' }
+{ tag: [ 'id' ], value: 'main' }
+{ tag: [ '(' ], value: '(' }
+{ tag: [ ')' ], value: ')' }
+{ tag: [ '{' ], value: '{' }
+{ tag: [ 'if', 'id' ], value: 'if' }
+{ tag: [ '(' ], value: '(' }
+{ tag: [ 'id' ], value: 'c' }
+{ tag: [ ')' ], value: ')' }
+{ tag: [ 'if', 'id' ], value: 'if' }
+{ tag: [ '(' ], value: '(' }
+{ tag: [ 'id' ], value: 'a' }
+{ tag: [ ')' ], value: ')' }
+{ tag: [ 'id' ], value: 'print' }
+{ tag: [ '(' ], value: '(' }
+{ tag: [ 'string' ], value: '"hhh"' }
+{ tag: [ ')' ], value: ')' }
+{ tag: [ ';' ], value: ';' }
+{ tag: [ 'else', 'id' ], value: 'else' }
+{ tag: [ '{' ], value: '{' }
+{ tag: [ 'id' ], value: 'test' }
+{ tag: [ '(' ], value: '(' }
+{ tag: [ 'integer', 'float' ], value: '1' }
+{ tag: [ ',' ], value: ',' }
+{ tag: [ 'integer', 'float' ], value: '1' }
+{ tag: [ '&' ], value: '&' }
+{ tag: [ 'integer', 'float' ], value: '1' }
+{ tag: [ ')' ], value: ')' }
+{ tag: [ ';' ], value: ';' }
+{ tag: [ '}' ], value: '}' }
+{ tag: [ '}' ], value: '}' }
+{ tag: [ 'type', 'id' ], value: 'float' }
+{ tag: [ 'id' ], value: 'test' }
+{ tag: [ '(' ], value: '(' }
+{ tag: [ 'type', 'id' ], value: 'int' }
+{ tag: [ 'id' ], value: 'a' }
+{ tag: [ ',' ], value: ',' }
+{ tag: [ 'type', 'id' ], value: 'int' }
+{ tag: [ 'id' ], value: 'b' }
+{ tag: [ ')' ], value: ')' }
+{ tag: [ '{' ], value: '{' }
+{ tag: [ 'return', 'id' ], value: 'return' }
+{ tag: [ '(' ], value: '(' }
+{ tag: [ 'type', 'id' ], value: 'float' }
+{ tag: [ ')' ], value: ')' }
+{ tag: [ '(' ], value: '(' }
+{ tag: [ 'id' ], value: 'a' }
+{ tag: [ '+' ], value: '+' }
+{ tag: [ 'id' ], value: 'b' }
+{ tag: [ ')' ], value: ')' }
+{ tag: [ ';' ], value: ';' }
+{ tag: [ '}' ], value: '}' }
+Start
+┣predefine
+┃┣#include ⇒ #include
+┃┣<> ⇒ <stdio.h>
+┃┗predefine
+┗program
+ ┣funcDef
+ ┃┣type ⇒ int
+ ┃┣id ⇒ main
+ ┃┣( ⇒ (
+ ┃┣funcValDef
+ ┃┣) ⇒ )
+ ┃┣{ ⇒ {
+ ┃┣noneAbleBlock
+ ┃┃┗blocks
+ ┃┃ ┗block
+ ┃┃  ┗if_block
+ ┃┃   ┣if ⇒ if
+ ┃┃   ┣( ⇒ (
+ ┃┃   ┣expr
+ ┃┃   ┃┗variable
+ ┃┃   ┃ ┗id ⇒ c
+ ┃┃   ┣) ⇒ )
+ ┃┃   ┗block
+ ┃┃    ┗if_block
+ ┃┃     ┣if ⇒ if
+ ┃┃     ┣( ⇒ (
+ ┃┃     ┣expr
+ ┃┃     ┃┗variable
+ ┃┃     ┃ ┗id ⇒ a
+ ┃┃     ┣) ⇒ )
+ ┃┃     ┣block
+ ┃┃     ┃┗statement
+ ┃┃     ┃ ┗expr_S
+ ┃┃     ┃  ┣expr
+ ┃┃     ┃  ┃┗funcCall
+ ┃┃     ┃  ┃ ┣id ⇒ print
+ ┃┃     ┃  ┃ ┣( ⇒ (
+ ┃┃     ┃  ┃ ┣expr
+ ┃┃     ┃  ┃ ┃┗literal
+ ┃┃     ┃  ┃ ┃ ┗string ⇒ "hhh"
+ ┃┃     ┃  ┃ ┗) ⇒ )
+ ┃┃     ┃  ┗; ⇒ ;
+ ┃┃     ┣else ⇒ else
+ ┃┃     ┗block
+ ┃┃      ┗bracket_block
+ ┃┃       ┣{ ⇒ {
+ ┃┃       ┣noneAbleBlock
+ ┃┃       ┃┗blocks
+ ┃┃       ┃ ┗block
+ ┃┃       ┃  ┗statement
+ ┃┃       ┃   ┗expr_S
+ ┃┃       ┃    ┣expr
+ ┃┃       ┃    ┃┗funcCall
+ ┃┃       ┃    ┃ ┣id ⇒ test
+ ┃┃       ┃    ┃ ┣( ⇒ (
+ ┃┃       ┃    ┃ ┣expr
+ ┃┃       ┃    ┃ ┃┣expr
+ ┃┃       ┃    ┃ ┃┃┗literal
+ ┃┃       ┃    ┃ ┃┃ ┗integer ⇒ 1
+ ┃┃       ┃    ┃ ┃┣, ⇒ ,
+ ┃┃       ┃    ┃ ┃┗expr
+ ┃┃       ┃    ┃ ┃ ┗bitExpr
+ ┃┃       ┃    ┃ ┃  ┣expr
+ ┃┃       ┃    ┃ ┃  ┃┗literal
+ ┃┃       ┃    ┃ ┃  ┃ ┗integer ⇒ 1
+ ┃┃       ┃    ┃ ┃  ┣& ⇒ &
+ ┃┃       ┃    ┃ ┃  ┗expr
+ ┃┃       ┃    ┃ ┃   ┗literal
+ ┃┃       ┃    ┃ ┃    ┗integer ⇒ 1
+ ┃┃       ┃    ┃ ┗) ⇒ )
+ ┃┃       ┃    ┗; ⇒ ;
+ ┃┃       ┗} ⇒ }
+ ┃┗} ⇒ }
+ ┗program
+  ┣funcDef
+  ┃┣type ⇒ float
+  ┃┣id ⇒ test
+  ┃┣( ⇒ (
+  ┃┣funcValDef
+  ┃┃┣type ⇒ int
+  ┃┃┣id ⇒ a
+  ┃┃┣, ⇒ ,
+  ┃┃┗funcValDef
+  ┃┃ ┣type ⇒ int
+  ┃┃ ┗id ⇒ b
+  ┃┣) ⇒ )
+  ┃┣{ ⇒ {
+  ┃┣noneAbleBlock
+  ┃┃┗blocks
+  ┃┃ ┗block
+  ┃┃  ┗statement
+  ┃┃   ┗return_S
+  ┃┃    ┣return ⇒ return
+  ┃┃    ┣expr
+  ┃┃    ┃┗()Expr
+  ┃┃    ┃ ┣( ⇒ (
+  ┃┃    ┃ ┣type ⇒ float
+  ┃┃    ┃ ┣) ⇒ )
+  ┃┃    ┃ ┗expr
+  ┃┃    ┃  ┗bracket
+  ┃┃    ┃   ┣( ⇒ (
+  ┃┃    ┃   ┣expr
+  ┃┃    ┃   ┃┗add
+  ┃┃    ┃   ┃ ┣expr
+  ┃┃    ┃   ┃ ┃┗variable
+  ┃┃    ┃   ┃ ┃ ┗id ⇒ a
+  ┃┃    ┃   ┃ ┣+ ⇒ +
+  ┃┃    ┃   ┃ ┗expr
+  ┃┃    ┃   ┃  ┗variable
+  ┃┃    ┃   ┃   ┗id ⇒ b
+  ┃┃    ┃   ┗) ⇒ )
+  ┃┃    ┗; ⇒ ;
+  ┃┗} ⇒ }
+  ┗program
+```

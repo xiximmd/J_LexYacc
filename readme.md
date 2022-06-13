@@ -450,8 +450,8 @@ var yacc = {
 
 ```
 ##### 闭包信息打印
-运行结果：
-状态0:  
+运行结果：  
+> 状态0:  
 Expr->★ num ,# | + | * |  
 Expr->★ ( Expr ) ,# | + | * |  
 Expr->★ Expr + Expr ,# | + | * |  
@@ -474,21 +474,22 @@ Expr->num ★ ,) | + | * |
 * 如果冲突双方为同一项目：
   * 直接选择一个
 
-运行结果：
-Expr
-╠Expr
-║╚num ⇒ 444
-╠+ ⇒ +
-╚Expr
- ╠Expr
- ║╚num ⇒ 999
- ╠* ⇒ *
- ╚Expr
-  ╠( ⇒ (
-  ╠Expr
-  ║╠Expr
-  ║║╚num ⇒ 777
-  ║╠+ ⇒ +
-  ║╚Expr
-  ║ ╚num ⇒ 6666
-  ╚) ⇒ )
+运行结果：  
+
+> Expr  
+╠Expr  
+║╚num ⇒ 444  
+╠+ ⇒ +  
+╚Expr  
+ ╠Expr  
+ ║╚num ⇒ 999  
+ ╠* ⇒ *  
+ ╚Expr  
+  ╠( ⇒ (  
+  ╠Expr  
+  ║╠Expr  
+  ║║╚num ⇒ 777  
+  ║╠+ ⇒ +  
+  ║╚Expr  
+  ║ ╚num ⇒ 6666  
+  ╚) ⇒ )  

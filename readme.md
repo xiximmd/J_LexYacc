@@ -104,14 +104,15 @@ console.log(output);//{ tag: [ 'ws' ], value: ' ', restStr: '1 67.9 21' }
 //以此类推重复调用readTag
 //最后调用output = j_lexers.finishRead();读取最后一个匹配
 ```
-运行效果如下：
-{ tag: [ 'float', 'int' ], value: '123', restStr: ' 1 67.9 21' }
-{ tag: [ 'ws' ], value: ' ', restStr: '1 67.9 21' }
-{ tag: [ 'float', 'int', 'num' ], value: '1', restStr: ' 67.9 21' }
-{ tag: [ 'ws' ], value: ' ', restStr: '67.9 21' }
-{ tag: [ 'float' ], value: '67.9', restStr: ' 21' }
-{ tag: [ 'ws' ], value: ' ', restStr: '21' }
-{ tag: [ 'float', 'int' ], value: '21', restStr: '' }
+运行效果如下：  
+> { tag: [ 'float', 'int' ], value: '123', restStr: ' 1 67.9 21' }  
+{ tag: [ 'ws' ], value: ' ', restStr: '1 67.9 21' }  
+{ tag: [ 'float', 'int', 'num' ], value: '1', restStr: ' 67.9 21' }  
+{ tag: [ 'ws' ], value: ' ', restStr: '67.9 21' }  
+{ tag: [ 'float' ], value: '67.9', restStr: ' 21' }  
+{ tag: [ 'ws' ], value: ' ', restStr: '21' }  
+{ tag: [ 'float', 'int' ], value: '21', restStr: '' }  
+
 #### 2.1.1 详细说明
 *注意：对应 j_lexdemo2，执行以下指令直接运行demo*  
 > * npm run j_lexdemo2  
@@ -361,19 +362,20 @@ function show(f) {
   }
 }
 ```
-运行效果如下：
-S
-╠A
-║╚b ⇒ 1
-╠S
-║╠A
-║║╚a ⇒ 2
-║╠S
-║║╚c ⇒ 3
-║╚A
-║ ╚b ⇒ 4
-╚A
- ╚a ⇒ 5
+运行效果如下：  
+> S  
+╠A  
+║╚b ⇒ 1  
+╠S  
+║╠A  
+║║╚a ⇒ 2  
+║╠S  
+║║╚c ⇒ 3  
+║╚A  
+║ ╚b ⇒ 4  
+╚A  
+ ╚a ⇒ 5  
+
 #### 3.1.2 详细说明
 *注意：对应 j_yaccdemo2，执行以下指令直接运行demo*  
 > * npm run j_yaccdemo2  

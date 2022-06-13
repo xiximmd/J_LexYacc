@@ -451,29 +451,29 @@ var yacc = {
 ```
 ##### 闭包信息打印
 运行结果：
-> 状态0:
-> Expr->★ num ,# | + | * |
-> Expr->★ ( Expr ) ,# | + | * |
-> Expr->★ Expr + Expr ,# | + | * |
-> Expr->★ Expr * Expr ,# | + | * |
-> Expr'->★ Expr ,# | + | * |
-> 状态1:
-> Expr->num ★ ,# | + | * |
-> 状态2:
-> Expr->★ num ,) | + | * |
-> Expr->★ ( Expr ) ,) | + | * |
-> Expr->( ★ Expr ) ,# | + | * |
-> Expr->★ Expr + Expr ,) | + | * |
-> Expr->★ Expr * Expr ,) | + | * |
-> 状态3:
-> Expr->num ★ ,) | + | * |
-> 。。。略。。。
+状态0:
+Expr->★ num ,# | + | * |
+Expr->★ ( Expr ) ,# | + | * |
+Expr->★ Expr + Expr ,# | + | * |
+Expr->★ Expr * Expr ,# | + | * |
+Expr'->★ Expr ,# | + | * |
+状态1:
+Expr->num ★ ,# | + | * |
+状态2:
+Expr->★ num ,) | + | * |
+Expr->★ ( Expr ) ,) | + | * |
+Expr->( ★ Expr ) ,# | + | * |
+Expr->★ Expr + Expr ,) | + | * |
+Expr->★ Expr * Expr ,) | + | * |
+状态3:
+Expr->num ★ ,) | + | * |
+。。。略。。。
 ##### 冲突解决策略
 * 如果冲突双方为同一项目：
   * 直接选择一个
 
 运行结果：
-> Expr
+Expr
 ╠Expr
 ║╚num ⇒ 444
 ╠+ ⇒ +

@@ -2,11 +2,11 @@
 作者：槿铃兔
 ## 一、说明
 1 该库包含J_Lex,L_Yacc两个工具  
-**2 注意，J_Lex,J_Yacc为两个代码生成器，不用词法分析器和语法分析器！！！**
+**2 注意，J_Lex,J_Yacc为两个代码生成器，不用词法分析器和语法分析器！！！**  
 3 该库为本人编译原理实验，许多地方有待完善，比如J_Lex生成的词法分析器没有进行DFA优化以及函数查重，性能上有待优化  
 4 快速上手：每个demo文件夹中均包含main.js和run.js，其中main.js进行代码生成，run.js运行生成的代码。也可通过npm指令执行，如下：  
 
-四个小demo
+四个小demo  
 > * npm run j_lexdemo1 //J_LexDemo1 main.js执行
 > *  npm run j_lexdemo1run //J_LexDemo1 run.js执行
 > *  npm run j_lexdemo2 //J_LexDemo2 main.js执行
@@ -16,7 +16,7 @@
 > *  npm run j_yaccdemo2 //J_YaccDemo2 main.js执行
 > *  npm run j_yaccdemo2run //J_YaccDemo2 run.js执行
 
-一个完整的demo,实现C语言大部分语法词法的分析
+一个完整的demo,实现C语言大部分语法词法的分析  
 > *  npm run demo //CompleteDemo main.js执行
 > *  npm run demorun //CompleteDemo run.js执行
 

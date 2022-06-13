@@ -36,14 +36,14 @@ function show(f) {
   console.log(f.symbol);
   showLayer(f.args, 0, "");
   function showLayer(args, layer, prefix) {
-    var nextPrefix = prefix + "║";
+    var nextPrefix = prefix + "┃";
     for (var i = 0; i < args.length; ++i) {
       var arg = args[i];
       var string;
       if (i < args.length - 1) {
-        string = prefix + "╠" + arg.c;
+        string = prefix + "┣" + arg.c;
       } else {
-        string = prefix + "╚" + arg.c;
+        string = prefix + "┗" + arg.c;
       }
       if (arg.args.val != undefined) {
         string += " ⇒ " + arg.args.val;

@@ -1,12 +1,18 @@
+//------代码生成------------代码生成------------代码生成------------代码生成------
+/**
+ * 完整demo，实现C语言大部分语法词法的分析
+ * 代码未详细注释，详细说明请参看J_LexDemo和J_YaccDemo中的注释
+ */
 import fs from "fs";
-import { J_Lex, J_Yacc } from "./J_LexYacc.js";
+import { J_Lex, J_Yacc } from "./../../J_LexYacc.js";
+//词法分析参数
 var lex = {
   input: {
     code: {
       prefix: `/*测试*/
         `,
       suffix: `
-        export default J_Lex;`,
+        export default J_Lexers;`,
     },
     regxs: [
       //关键字
@@ -91,20 +97,21 @@ var lex = {
     ],
   },
 };
-var Vt = [];
+var Vt = []; //终结符集合，直接从j_lex的输入中获取
 lex.input.regxs.forEach((regx) => {
   if (regx.noMatch == true) {
   } else {
     Vt.push(regx.id);
   }
 });
+//语法分析输入
 var yacc = {
   input: {
     code: {
       prefix: `/*测试*/
         `,
       suffix: `
-        export default J_Yacc;`,
+        export default J_Parser;`,
     },
     formalGram: {
       asso: "l",
@@ -112,11 +119,7 @@ var yacc = {
         { id: "Start", gram: "predefine program" },
         {
           id: "predefine",
-          gram: [
-            "#include <> predefine",
-            "#include string predefine",
-            "",
-          ],
+          gram: ["#include <> predefine", "#include string predefine", ""],
         },
         { id: "program", gram: ["funcDef program", "block program", ""] },
         { id: "funcDef", gram: "type id ( funcValDef ) { noneAbleBlock }" }, //函数声明
@@ -307,12 +310,16 @@ var yacc = {
     },
   },
 };
+console.log("开始生成");
+console.log("词法分析生成器开始运行");
 J_Lex.run(lex);
-// console.log(lex.NFA.sides);
-// console.log(lex.DFA.sides);
-// console.log(lex.input.regxs);
-fs.writeFileSync("./test/out.js", lex.code);
+console.log("词法分析生成器运行结束");
+fs.writeFileSync("./out/J_Lexers.js", lex.code);
+console.log("词法分析代码保存结束");
+console.log("语法分析生成器开始运行");
 J_Yacc.run(yacc);
+console.log("语法分析生成器运行结束");
+//以下代码为输出J_Yacc冲突处理的代码，如果不需要可以注释掉，提高运行速率
 // var s = "";
 // J_Yacc.showConflictResolution(
 //   yacc,
@@ -322,5 +329,7 @@ J_Yacc.run(yacc);
 //   3,
 //   4
 // );
-// fs.writeFileSync("./test/out3.txt", s);
-fs.writeFileSync("./test/out2.js", yacc.code);
+// fs.writeFileSync("./out/log.txt", s);
+fs.writeFileSync("./out/J_Parser.js", yacc.code);
+console.log("语法分析代码保存结束");
+console.log("生成完毕");

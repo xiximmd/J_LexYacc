@@ -4,10 +4,6 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "main": "node main.js",
-    "test": "node test.js",
-    "test2": "node test2.js",
-    "test3": "node test3.js",
     "j_lexdemo1": "cd ./demo/J_LexDemo/demo1/ && node main.js",
     "j_lexdemo1run": "cd ./demo/J_LexDemo/demo1/ && node run.js",
     "j_lexdemo2": "cd ./demo/J_LexDemo/demo2/ && node main.js",
@@ -15,7 +11,9 @@
     "j_yaccdemo1": "cd ./demo/J_YaccDemo/demo1/ && node main.js",
     "j_yaccdemo1run": "cd ./demo/J_YaccDemo/demo1/ && node run.js",
     "j_yaccdemo2": "cd ./demo/J_YaccDemo/demo2/ && node main.js",
-    "j_yaccdemo2run": "cd ./demo/J_YaccDemo/demo2/ && node run.js"
+    "j_yaccdemo2run": "cd ./demo/J_YaccDemo/demo2/ && node run.js",
+    "demo": "cd ./demo/CompleteDemo/ && node main.js",
+    "demorun": "cd ./demo/CompleteDemo/ && node run.js"
   },
   "author": "",
   "license": "ISC",

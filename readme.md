@@ -10,6 +10,10 @@
 > *  npm run j_lexdemo2run //J_LexDemo2 run.js执行
 > *  npm run j_yaccdemo1 //J_YaccDemo1 main.js执行
 > *  npm run j_yaccdemo1run //J_YaccDemo1 run.js执行
+> *  npm run j_yaccdemo2 //J_YaccDemo2 main.js执行
+> *  npm run j_yaccdemo2run //J_YaccDemo2 run.js执行
+> *  npm run demo //CompleteDemo main.js执行
+> *  npm run demorun //CompleteDemo run.js执行
 
 4 根目录下的test代码为未整理代码，暂不可用  
 5 文档编写中。。。
@@ -340,14 +344,14 @@ function show(f) {
   console.log(f.symbol);
   showLayer(f.args, 0, "");
   function showLayer(args, layer, prefix) {
-    var nextPrefix = prefix + "║";
+    var nextPrefix = prefix + "┃";
     for (var i = 0; i < args.length; ++i) {
       var arg = args[i];
       var string;
       if (i < args.length - 1) {
-        string = prefix + "╠" + arg.c;
+        string = prefix + "┣" + arg.c;
       } else {
-        string = prefix + "╚" + arg.c;
+        string = prefix + "┗" + arg.c;
       }
       if (arg.args.val != undefined) {
         string += " ⇒ " + arg.args.val;
@@ -363,18 +367,18 @@ function show(f) {
 }
 ```
 运行效果如下：  
-> S  
-╠A  
-║╚b ⇒ 1  
-╠S  
-║╠A  
-║║╚a ⇒ 2  
-║╠S  
-║║╚c ⇒ 3  
-║╚A  
-║ ╚b ⇒ 4  
-╚A  
- ╚a ⇒ 5  
+>S  
+┣A  
+┃┗b ⇒ 1  
+┣S  
+┃┣A  
+┃┃┗a ⇒ 2  
+┃┣S  
+┃┃┗c ⇒ 3  
+┃┗A  
+┃ ┗b ⇒ 4  
+┗A  
+ ┗a ⇒ 5  
 
 #### 3.1.2 详细说明
 *注意：对应 j_yaccdemo2，执行以下指令直接运行demo*  
@@ -531,22 +535,22 @@ Expr->Expr ★ * Expr ,) | + | * |
 Expr->Expr + Expr ★ ,) | + | * |   
 。。。略。。。  
 
-j_yaccdemo2运行结果：  
+
+j_yaccdemo2运行最终结果：  
 
 > Expr  
-╠Expr  
-║╚num ⇒ 444  
-╠+ ⇒ +  
-╚Expr  
- ╠Expr  
- ║╚num ⇒ 999  
- ╠* ⇒ *  
- ╚Expr  
-  ╠( ⇒ (  
-  ╠Expr  
-  ║╠Expr  
-  ║║╚num ⇒ 777  
-  ║╠+ ⇒ +  
-  ║╚Expr  
-  ║ ╚num ⇒ 6666  
-  ╚) ⇒ )  
+┣Expr  
+┃┗num ⇒ 444  
+┣+ ⇒ +  
+┗Expr  
+ ┣Expr  
+ ┃┗num ⇒ 999  
+ ┣* ⇒ *  
+ ┗Expr  
+  ┣( ⇒ (  
+  ┃┣Expr  
+  ┃┃┗num ⇒ 777  
+  ┃┣+ ⇒ +  
+  ┃┗Expr  
+  ┃ ┗num ⇒ 6666  
+  ┗) ⇒ )  
